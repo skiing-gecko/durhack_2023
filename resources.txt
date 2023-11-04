@@ -1,0 +1,2 @@
+geoguesser api calls: https://github.com/EvickaStudio/GeoGuessr-API
+https://developers.google.com/maps/documentation/embed/get-started
