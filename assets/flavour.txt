@@ -1,0 +1,9 @@
+We are currently testing a new version of Kaptcha, please solve the following.
+Good morning! I've got another one here for you to solve.
+Oops! We encountered an error. Please try again.
+Approximately [null] people have failed this Kapatcha, so you're not alone!
+Oh, you were so close! Give it another try.
+Select all that apply.
+Give this one a whirl.
+That was clever, good job. Proud of you.
+Let's give this one a shot.
