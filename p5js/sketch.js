@@ -1,10 +1,16 @@
-let level = 1;
+let level = 0;
 let check = false;
 let state = "init";
 let checked, unchecked;
 let transitiontime = 2000;
 let answerbox, submit1, level1input;
 let captcha1answer = "2fxgd";
+let selectedSquares = [];
+let num3x3 = 40;
+let img3x3, selected3x3;
+
+// const path = require('path')
+// const fs = require('fs')
 
 function preload() {
   // level 0
@@ -13,10 +19,14 @@ function preload() {
 
   // level 1
   captcha1 = loadImage("assets/letters-and-numbers/2fxgd.png");
+
+  // level 2
+  selected3by3 = Math.floor(Math.random()) * num3x3;
+  // img3x3 = loadImage(str(selected3x3) + "_")
 }
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(800, 800);
   imageMode(CENTER);
 }
 
@@ -50,12 +60,15 @@ function draw() {
     }
     image(captcha1, width/2, height/2, 200, 50);
     answerbox.show();
+  } else if (level === 2) {
+
   }
 }
 
 function mousePressed() {
+  // console.log(mouseX, mouseY);
   if (level === 0) {
-    if (mouseX > 100 && mouseY > 265 && mouseX < 170 && mouseY < 335) {
+    if (mouseX > 200 && mouseY > 365 && mouseX < 270 && mouseY < 435) {
       check = true;
     }
   }
@@ -71,7 +84,6 @@ function captch1input() {
 }
 
 function captcha1submit() {
-
   if (level1input === captcha1answer) {
     state = "captcha1correct";
     answerbox.remove();
