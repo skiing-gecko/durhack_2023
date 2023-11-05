@@ -1,7 +1,7 @@
 let level = 0;
 let check = false;
 let state = "init";
-let checked, unchecked;
+let checked, unchecked, banned;
 let transitiontime = 2000;
 let answerbox, submit1, level1input;
 let captcha1answer = "2fxgd";
@@ -14,20 +14,39 @@ let phase = 1;
 let phase2check = false;
 let phase3check = false;
 let img10x10;
-
 let imgyoff = 100;
+let wally1, wally2;
+let bg, bg404;
+let intro, symbols, catndog, tenxten, phase2, phase3, wally, finalimnotarobot, andahalf, finale;
+let bluescreen, music;
+let playonce = true;
 
 // const path = require('path')
 // const fs = require('fs')
 
-let bg;
 
 function preload() {
+  intro = loadSound("assets/0intro.mp3");
+  symbols = loadSound("assets/1symbols.mp3");
+  catndog = loadSound("assets/2catndog.mp3");
+  tenxten = loadSound("assets/310x10.mp3");
+  phase2 = loadSound("assets/4phase2.mp3");
+  phase3 = loadSound("assets/5phsae3.mp3");
+  wally = loadSound("assets/6 wally.mp3");
+  finalimnotarobot = loadSound("assets/7 finalimnotarobot.mp3");
+  andahalf = loadSound("assets/7andahalfputsomehwere.mp3");
+  finale = loadSound("assets/8 finale.mp3");
+
+  bluescreen = loadSound("assets/blue-screen.mp3");
+  music = loadSound("assets/cold-mind-enigma-2-crime-mysterious-detective-music-loopable-95450.mp3");
+
   bg = loadImage("assets/bg.png");
+  bg404 = loadImage("assets/bg404.png");
 
   // level 0
   checked = loadImage("assets/checked.png");
   unchecked = loadImage("assets/unchecked.png");
+  banned = loadImage("assets/banned.png");
 
   // level 1
   captcha1 = loadImage("assets/letters-and-numbers/2fxgd.png");
@@ -39,7 +58,7 @@ function preload() {
     "30_CCDCDDDDC_D.png",
     "33_DDDDCCDCD_C.png",
     "27_DDDDDDDCC_D.png"
-  ]
+  ];
   let i = Math.floor(Math.random() * imgs3x3.length);
 
   img3x3 = loadImage("assets/kaptchas/" + imgs3x3[i]);
@@ -50,6 +69,10 @@ function preload() {
 
   // level 3
   img10x10 = loadImage("assets/10x10-export.png");
+
+  // level 4
+  wally1 = loadImage("assets/wally1.jpg");
+  wally2 = loadImage("assets/wally2.jpg");
 }
 
 function setup() {
@@ -69,9 +92,15 @@ function setup() {
     theClickArrayOfPower.push([hlb, wlb, squareCorrect, level3fname[level3fname.length - 6 - (9 - i)], i]);
   }
   img10x10.resize(555,655);
+  wally1.resize(800,450);
+  wally2.resize(800,450);
+
+  music.loop();
+  intro.play();
 }
 
 function draw() {
+
   // background(250,222,195);
   imageMode(CORNER);
   image(bg, 0, 0);
@@ -90,6 +119,10 @@ function draw() {
     imageMode(CENTER);
     image(img, width/2, height/2);
   } else if (level === 1) {
+    if (playonce === true) {
+      symbols.play();
+      playonce = false;
+    }
     if (state !== "level1") {
       state = "level1";
       answerbox = createInput("");
@@ -106,6 +139,10 @@ function draw() {
     image(captcha1, width/2, height/2, 200, 50);
     answerbox.show();
   } else if (level === 2) {
+    if (playonce === true) {
+      catndog.play();
+      playonce = false;
+    }
     imageMode(CORNER);
     image(img3x3, drawLocX, 15 + imgyoff, 470, 570);
     // loop through each square index
@@ -138,6 +175,10 @@ function draw() {
     fill(255);
     textSize(28);
     if (phase === 1) { // mammals
+      if (playonce === true) {
+        tenxten.play();
+        playonce = false;
+      }
       text("Please Select The Mammals", drawLocX+100, 75 + imgyoff);
       theTenClickArrayOfNewPower = [
         [0,0,false],[0,0,false],[0,0,false],[0,0,false],[0,0,false],[0,0,false],[0,0,false],[0,0,true],[0,0,true],[0,0,true],
@@ -152,6 +193,10 @@ function draw() {
         [0,0,false],[0,0,true],[0,0,true],[0,0,true],[0,0,false],[0,0,false],[0,0,true],[0,0,true],[0,0,true],[0,0,true]
       ];
     } else if (phase === 2) {
+      if (playonce === true) {
+        phase2.play();
+        playonce = false;
+      }
       textSize(20);
       text("Please Unselect The Non-Primes and Select The Primes", drawLocX+25, 75 + imgyoff);
       theTenClickArrayOfNewPower = [
@@ -175,6 +220,10 @@ function draw() {
         phase2check = true;
       } 
     } else if (phase === 3) {
+      if (playonce === true) {
+        phase3.play();
+        playonce = false;
+      }
       text("Now select the opposite cells", drawLocX+100, 75 + imgyoff)
       theTenClickArrayOfNewPower = [
         [0,0,false],[0,0,false],[0,0,false],[0,0,false],[0,0,false],[0,0,false],[0,0,false],[0,0,true],[0,0,true],[0,0,true],
@@ -225,17 +274,76 @@ function draw() {
     if (correctSum === numOfCorrect) {
       phase += 1;
       correctSum = 0;
+      playonce = true;
     }
     if (phase >= 4) {
       nextlevel();
       phase = 1;
     }
+  } else if (level === 4) { // wally
+    if (playonce === true) {
+      wally.play();
+      playonce = false;
+    }
+    image(wally1, 0, 200);
+    textSize(40);
+    textAlign(CENTER);
+    fill(255);
+    text("Find Wally!", drawLocX+85, 50);
+  } else if (level === 5) {
+    image(wally2, 0, 200);
+    textSize(40);
+    textAlign(CENTER);
+    text("Find Wally, again!", drawLocX+85, 50);
+    fill(255);
+  } else if (level === 6 || level === 7 || level === 8) {
+    if (playonce === true && level === 6) {
+      finalimnotarobot.play();
+      playonce = false;
+    }
+    if (playonce === true && level === 7) {
+      andahalf.play();
+      playonce = false;
+    }
+    if (check === true && state === "init") {
+      state = "pressed_once";
+      setTimeout(nextlevel, transitiontime);
+    }
+    let img;
+    if (check === false) {
+      img = unchecked;
+    } else {
+      if (level === 8) {
+        img = checked;
+      } else {
+        img = banned;
+      }
+    }
+    imageMode(CENTER);
+    image(img, width/2, height/2);
+  } else if (level === 9) {
+    if (playonce === true) {
+      finale.play();
+      playonce = false;
+    }
+    if (check === false && state === "init") {
+      state = "waiting";
+      setTimeout(error404, transitiontime);
+    } else if (check === true && state === "init") {
+      imageMode(CORNER);
+      image(bg404, 0, 0);
+    }
   }
+}
+
+function error404() {
+  check = true;
+  state = "init";
 }
 
 function mousePressed() {
   // console.log(mouseX, mouseY);
-  if (level === 0) {
+  if (level === 0 || level === 6 || level === 7 || level === 8) {
     if (mouseX > 200 && mouseY > 365 && mouseX < 270 && mouseY < 435) {
       check = true;
     }
@@ -246,7 +354,7 @@ function mousePressed() {
           selectedSquares.push(i);
         } else {
           // remove item
-          let idx = selectedSquares.indexOf(i);
+          let idx = arr_indexOf(selectedSquares, i);
           selectedSquares.splice(idx, 1);
         }
       }
@@ -262,7 +370,14 @@ function mousePressed() {
         }
       }
     });
-    console.log(selectedSquares);
+  } else if (level === 4) {
+    if (mouseX > 485 && mouseX < 505 && mouseY > 370 && mouseY < 390) {
+      nextlevel();
+    }
+  } else if (level === 5) {
+    if (mouseX > 675 && mouseX < 695 && mouseY > 545 && mouseY > 565) {
+      nextlevel();
+    }
   }
 }
 
@@ -304,6 +419,8 @@ function arr_has_arr(a, b) {
 function nextlevel() {
   level += 1;
   check = false;
+  state = "init";
+  playonce = true;
 }
 
 function captch1input() {
