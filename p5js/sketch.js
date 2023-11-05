@@ -322,13 +322,13 @@ function draw() {
     imageMode(CENTER);
     image(img, width/2, height/2);
   } else if (level === 9) {
-    if (playonce === true) {
+    if (playonce === true && state === "init") {
       finale.play();
       playonce = false;
     }
     if (check === false && state === "init") {
       state = "waiting";
-      setTimeout(error404, transitiontime);
+      setTimeout(error404, 6000);
     } else if (check === true && state === "init") {
       imageMode(CORNER);
       image(bg404, 0, 0);
@@ -339,6 +339,8 @@ function draw() {
 function error404() {
   check = true;
   state = "init";
+  bluescreen.setVolume(50);
+  bluescreen.play();
 }
 
 function mousePressed() {
